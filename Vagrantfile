@@ -10,11 +10,11 @@ x = YAML.load_file(settings_file)
 
 Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |vb|
-    vb.name = "jupyterlab"
+    vb.name = "jupyterlab-docker"
     vb.cpus = x.fetch('machine').fetch('cpu')
     vb.memory = x.fetch('machine').fetch('memory')
   end
-    config.vm.define :"jupyterlab" do |t|
+    config.vm.define :"jupyterlab-docker" do |t|
   end
   config.vm.hostname = "jupyterlab"
   config.vm.box = "ubuntu/focal64"
