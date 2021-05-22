@@ -1,0 +1,4 @@
+machine:
+  cpu: 2
+  memory: 4000
+synced_folder: ../data
