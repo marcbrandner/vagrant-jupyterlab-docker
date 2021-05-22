@@ -86,10 +86,10 @@ RUN echo '--- Install NLP Packages' \
     spacy \
     langdetect \
 && rm -rf ~/.cache/pip
-RUN python -m spacy download de_core_news_lg
-RUN python -m spacy download de_core_news_sm
-RUN python -m spacy download en_core_web_lg
 RUN python -m spacy download en_core_web_sm
+RUN python -m spacy download en_core_web_trf
+RUN python -m spacy download de_core_news_sm
+RUN python -m spacy download de_dep_news_trf
 
 RUN echo '--- Update JupyterLab to latest' \
 && pip install --upgrade jupyterlab \
