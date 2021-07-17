@@ -1,4 +1,6 @@
 machine:
   cpu: 2
   memory: 4000
-synced_folder: ../data
+synced_folders:
+  - box_path: /data
+    host_path: ../data
