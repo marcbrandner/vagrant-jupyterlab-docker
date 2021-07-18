@@ -24,10 +24,11 @@ Vagrant.configure("2") do |config|
   config.vm.network "forwarded_port", guest: 8321, host: 8321   # Streamlit app
   if vagrant_config['synced_folders']
     vagrant_config.fetch('synced_folders').each do |record|
-      config.vm.synced_folder record['host_path'], record['box_path'], disabled: false
+      config.vm.synced_folder record['host_path'], record['box_path'], disabled: false, mount_options: ["dmode=777,fmode=777"]
     end
   end
   config.vm.provision "shell", path: "scripts/install_docker.sh", privileged: false
-  config.vm.provision "shell", path: "scripts/build_and_run.sh", privileged: false
+  config.vm.provision "shell", path: "scripts/build.sh", privileged: false
+  config.vm.provision "shell", path: "scripts/run.sh", privileged: false
   config.vm.post_up_message = "Access JupyterLab using: http://localhost:8123"
 end
