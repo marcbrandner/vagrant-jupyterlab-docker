@@ -30,7 +30,8 @@ vagrant plugin install \
     vagrant-disksize \
     vagrant-hostmanager \
     vagrant-hosts \
-    vagrant-reload
+    vagrant-reload \
+    vagrant-vbguest
 ```
 
 ## Build Box
@@ -51,6 +52,8 @@ Files monted on `synced_path` can be accessed via folder `work` in JupyterLab's 
 
 # Advanced
 
+## Modifying JupyterLab
+
 To add additional Python packages or JupyterLab extensions persistently
 * modify `Dockerfile`
 * enter the Vagrant box: `vagrant ssh`
@@ -69,4 +72,16 @@ sudo docker exec -it jupyterlab /bin/bash
 
 # Install package (for example 'wget')
 pip install wget
+```
+
+## Adding New Shared Folders
+
+After adding new shared folders in `vagrant_custom.yaml`, delete and recreate the container.
+
+```
+# Enter VM
+vagrant ssh
+
+# Execute run.sh script
+bash /vagrant/scripts/run.sh
 ```
