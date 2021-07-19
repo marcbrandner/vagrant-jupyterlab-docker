@@ -59,7 +59,7 @@ RUN echo '--- Install Data Viz Packages' \
 
 RUN echo "--- Install Missing Tensorflow Packages Causing Error: >> The TensorFlow library was compiled to use FMA instructions, but these aren't available on your machine.<<" \
 && pip install --upgrade \
-    tensorflow-gpu  \
+    "tensorflow>=2.5" "tensorflow-gpu>=2.5" \
 && rm -rf ~/.cache/pip
 
 RUN echo "--- Install Missing Tensorflow Docs" \
