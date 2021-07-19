@@ -1,4 +1,4 @@
-A Vagrant box providing my JupyterLab environment. Comes with many popular Data Science packages for Python and doesn't care about Python Virtual Envs. Based on a container run by Docker ([`docker.io/jupyter/tensorflow-notebook:latest`](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#core-stacks)). 
+A Vagrant box providing my JupyterLab environment. Comes with many popular Data Science packages for Python and doesn't care about Python Virtual Envs. Based on a container run by Docker ([`docker.io/jupyter/tensorflow-notebook:latest`](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#core-stacks)). Choice of packages is stringly opinionated.
 
 
 # Requirements
@@ -21,7 +21,15 @@ Adjust the sizing to your needs by copying `vagrant_default.yaml` to `vagrant_cu
 
 ## Set Synced Folder
 
-The box mounts the path given in property `synced_folder` in files `vagrant_default.yaml` or `vagrant_custom.yaml` (has precedence). This way you can access your existing notebooks and data files and also make sure, that your notebooks are saved persistently on your host machine.
+The box mounts the path given in property `synced_folders` in files `vagrant_default.yaml` or `vagrant_custom.yaml` (has precedence). This way you can access your existing notebooks and data files and also make sure, that your notebooks are saved persistently on your host machine. Example for a Windows machine:
+```
+synced_folders:
+  - box_path: "/data/project_a"
+    host_path: "C:/some/path"
+  - box_path: "/data/project_b"
+    host_path: "C:/some/other/path"
+```
+__NOTICE:__ Use a `box_path` starting with a root path of `/data/` to be able to use it JupyterLab.
 
 ## Install Vagrant Plugins
 
@@ -74,10 +82,9 @@ sudo docker exec -it jupyterlab /bin/bash
 pip install wget
 ```
 
-## Adding New Shared Folders
+## Recreate JupyterLab Container
 
-After adding new shared folders in `vagrant_custom.yaml`, delete and recreate the container.
-
+Delete and recreate the container using script `run.sh`:
 ```
 # Enter VM
 vagrant ssh
