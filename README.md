@@ -57,7 +57,7 @@ After the box is up, access it with a browser on the VirtualBox host: `http://lo
 
 __Be careful:__ Token authentication is disabled.
 
-Files monted on `synced_path` can be accessed via folder `work` in JupyterLab's scope in the file browser.
+Files mounted using `synced_paths` in `vagrant_custom.yaml` can be accessed via folder `work` in JupyterLab's scope in the file browser.
 
 
 # Advanced
