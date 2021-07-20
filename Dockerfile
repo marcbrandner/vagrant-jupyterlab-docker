@@ -1,23 +1,26 @@
-FROM docker.io/jupyter/tensorflow-notebook:latest
+FROM docker.io/jupyter/base-notebook:python-3.9.5
 # See covered packages: https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#core-stacks
 
 # Switch to root to allow apt commands
 USER root
 
 # Install Debian packages and cleanup afterwards
-RUN echo '--- Install Notebook PDF Export Support & Required Compilers' \
+RUN echo '--- Install Notebook PDF Export Support, required compilers & sudo support' \
 && apt-get update \
-&& apt-get install -y --no-install-recommends pandoc texlive-fonts-recommended build-essential \
+&& apt-get install -y --no-install-recommends pandoc texlive-fonts-recommended build-essential sudo \
 && apt-get autoremove -y --purge \
 && apt-get autoclean \
 && apt-get clean \
 && rm -rf /var/lib/apt/lists/*
 
+# Add user 'jovyan' to sudoers list
+RUN echo 'jovyan ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
 # Switch back to standard user of the Jupyter images
 USER jovyan
 
 RUN echo '--- Install Basic Data Science Packages' \
-&& pip install \
+&& pip install --upgrade \
     cython \
     numpy \
     pandas \
@@ -29,7 +32,7 @@ RUN echo '--- Install Basic Data Science Packages' \
 && rm -rf ~/.cache/pip
 
 RUN echo '--- Install Other Useful Packages' \
-&& pip install \
+&& pip install --upgrade \
     convertdate \
     lunarcalendar \
     holidays \
@@ -57,15 +60,13 @@ RUN echo '--- Install Data Viz Packages' \
     altair \
 && rm -rf ~/.cache/pip
 
-RUN echo "--- Install Missing Tensorflow Packages Causing Error: >> The TensorFlow library was compiled to use FMA instructions, but these aren't available on your machine.<<" \
-&& pip install --upgrade \
-    "tensorflow>=2.5" "tensorflow-gpu>=2.5" \
-&& rm -rf ~/.cache/pip
-
-RUN echo "--- Install Missing Tensorflow Docs" \
-&& pip install --upgrade \
-    git+https://github.com/tensorflow/docs  \
-&& rm -rf ~/.cache/pip  
+RUN echo '--- Install Intel-Optimized Tensorflow 2.5.0 if available'
+RUN cat /proc/cpuinfo | grep avx2; if [ $? -eq 0 ]; then export TF_ENABLE_ONEDNN_OPTS=1; else export TF_ENABLE_ONEDNN_OPTS=0; fi; \
+    pip install "tensorflow==2.5.0" "tensorflow_hub" && rm -rf ~/.cache/pip
+# More details:
+#   https://software.intel.com/content/www/us/en/develop/articles/intel-optimization-for-tensorflow-installation-guide.html
+#   https://unix.stackexchange.com/questions/43539/what-do-the-flags-in-proc-cpuinfo-mean
+#   https://www.tensorflow.org/api_docs/python/tf/sysconfig/get_compile_flags
 
 RUN echo '--- Install Other ML Packages' \
 &&  pip install --upgrade \
