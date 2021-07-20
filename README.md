@@ -104,3 +104,8 @@ vagrant ssh
 # Execute run.sh script
 bash /vagrant/scripts/run.sh
 ```
+
+## Exec JupyterLab Container as `root`
+```
+sudo docker exec -it --user root jupyterlab bash
+```
