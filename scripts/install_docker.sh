@@ -16,3 +16,4 @@ sudo add-apt-repository \
    stable"
 sudo apt-get update &> /dev/null 
 sudo apt-get install -y -qq docker-ce docker-ce-cli containerd.io
+sudo usermod -aG docker vagrant 

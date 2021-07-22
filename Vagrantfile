@@ -27,7 +27,8 @@ Vagrant.configure("2") do |config|
       config.vm.synced_folder record['host_path'], record['box_path'], disabled: false, mount_options: ["dmode=777,fmode=777"]
     end
   end
-  config.vm.provision "shell", path: "scripts/install_docker.sh", privileged: false
+  config.vm.provision "shell", path: "scripts/install_docker.sh", privileged: true
+  config.vm.provision :reload
   config.vm.provision "shell", path: "scripts/build.sh", privileged: false
   config.vm.provision "shell", path: "scripts/run.sh", privileged: false, run: "always"
   config.vm.post_up_message = "Access JupyterLab using: http://localhost:8123"
