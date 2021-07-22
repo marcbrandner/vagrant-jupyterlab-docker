@@ -12,7 +12,7 @@ echo -e "\n--- Run Image"
 
 JLAB_IMAGE='jupyterlab-custom:latest'
 
-if docker images | grep jupyterlab-custom:latest &> /dev/null; [ $? -ne 0 ]; then
+if docker images | grep jupyterlab-custom.*latest &> /dev/null; [ $? -ne 0 ]; then
     echo "Docker image '$JLAB_IMAGE' not available yet. Skip attempt to run the image."
     exit 0
 fi
