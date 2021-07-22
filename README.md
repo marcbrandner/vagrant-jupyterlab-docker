@@ -1,4 +1,4 @@
-A Vagrant box providing my JupyterLab environment. Comes with many popular Data Science packages for Python and doesn't care about Python Virtual Envs. Based on a container run by Docker ([`docker.io/jupyter/tensorflow-notebook:latest`](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#core-stacks)). Choice of packages is stringly opinionated.
+A Vagrant box providing my JupyterLab environment. Comes with many popular Data Science packages for Python and doesn't care about Python Virtual Envs. Based on a container run by Docker ([`docker.io/jupyter/base-notebook:python`](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#core-stacks)). Choice of packages is stringly opinionated.
 
 
 # Requirements
@@ -51,6 +51,8 @@ Then fire up the box:
 vagrant up
 ```
 
+__Please note:__ Some of selected packages are heavy (100 MB +). Depending on your bandwidth and allocated CPU cores, setting up the box for the first time may take up time for one or two cups of coffee.
+
 ## Access JupyterLab
 
 After the box is up, access it with a browser on the VirtualBox host: `http://localhost:8123`.
@@ -72,7 +74,7 @@ To install Python packages without a complete rebuild, enter the container in th
 vagrant ssh
 
 # Enter container
-sudo docker exec -it jupyterlab /bin/bash
+docker exec -it jupyterlab /bin/bash
 
 # Install package (for example 'wget')
 pip install wget
@@ -81,7 +83,7 @@ pip install wget
 exit
 
 # Persists the changes to the pre-built image
-sudo docker commit $(sudo docker ps -a --filter name=jupyterlab -q) jupyterlab-custom:latest
+docker commit $(sudo docker ps -a --filter name=jupyterlab -q) jupyterlab-custom:latest
 ```
 
 __Second Option:__
@@ -91,7 +93,8 @@ Alternative way of adding Python packages or JupyterLab extensions:
 * Enter the Vagrant box: `vagrant ssh`
 * Run the `install.sh` script once again:
 ```
-bash /vagrant/scripts/build_and_run.sh
+bash /vagrant/scripts/build.sh
+bash /vagrant/scripts/run.sh
 ```
 
 ## Recreate JupyterLab Container
@@ -107,5 +110,5 @@ bash /vagrant/scripts/run.sh
 
 ## Exec JupyterLab Container as `root`
 ```
-sudo docker exec -it --user root jupyterlab bash
+docker exec -it --user root jupyterlab bash
 ```
