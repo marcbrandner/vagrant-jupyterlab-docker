@@ -1,5 +1,4 @@
-FROM docker.io/jupyter/base-notebook:python-3.9.5
-# See covered packages: https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#core-stacks
+FROM docker.io/jupyter/base-notebook:python-3.8.10
 
 # Switch to root to allow apt commands
 USER root
@@ -68,10 +67,7 @@ RUN cat /proc/cpuinfo | grep avx2; if [ $? -eq 0 ]; then export TF_ENABLE_ONEDNN
 #   https://unix.stackexchange.com/questions/43539/what-do-the-flags-in-proc-cpuinfo-mean
 #   https://www.tensorflow.org/api_docs/python/tf/sysconfig/get_compile_flags
 
-RUN echo '--- Install Other ML Packages' \
-&&  pip install --upgrade \
-    mlxtend xgboost rrcf \
-&& rm -rf ~/.cache/pip
+# Other ML packages: mlxtend xgboost rrcf
 
 RUN echo '--- Install Pystan Version Compatible with Prophet' \
 && pip install pystan==2.19.1.1 \
@@ -87,10 +83,12 @@ RUN echo '--- Install NLP Packages' \
     spacy \
     langdetect \
 && rm -rf ~/.cache/pip
-RUN python -m spacy download en_core_web_sm
-RUN python -m spacy download en_core_web_trf
-RUN python -m spacy download de_core_news_sm
-RUN python -m spacy download de_dep_news_trf
+
+# Uncomment for download of language modules (trf models are large)
+#RUN python -m spacy download en_core_web_sm
+#RUN python -m spacy download en_core_web_trf
+#RUN python -m spacy download de_core_news_sm
+#RUN python -m spacy download de_dep_news_trf
 
 RUN echo '--- Update JupyterLab to latest' \
 && pip install --upgrade jupyterlab \
@@ -106,7 +104,11 @@ RUN echo '--- Install JupyterLab Extensions' \
     jupyterlab-plotly \
     plotlywidget \
     jupyterlab-dash \
+    @jupyter-widgets/jupyterlab-manager \
     --no-build > /dev/null
+
+RUN echo '--- Enable ipywidgets ' \
+&& jupyter nbextension enable --py widgetsnbextension
     
 RUN echo '--- Build JupyterLab Assets (may take several minutes ...)' \
 && jupyter lab build --minimize=False > /dev/null
