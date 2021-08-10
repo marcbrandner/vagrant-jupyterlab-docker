@@ -11,18 +11,22 @@ fi
 echo -e "\n--- Run Image"
 
 JLAB_IMAGE='jupyterlab-custom:latest'
+mkdir -p /tmp/python-cache
 
 if docker images | grep jupyterlab-custom.*latest &> /dev/null; [ $? -ne 0 ]; then
     echo "Docker image '$JLAB_IMAGE' not available yet. Skip attempt to run the image."
     exit 0
 fi
 
+# --shm-size: https://stackoverflow.com/a/46644487
 docker run \
     -d \
     --restart=always \
     -p 8888:8888 \
     -v /data:/home/jovyan/work \
+    -v /tmp/python-cache:/home/jovyan/.cache \
     --env JUPYTER_ENABLE_LAB=yes \
+    --shm-size=4096m \
     --name jupyterlab \
     $JLAB_IMAGE
 
