@@ -1,4 +1,4 @@
-A Vagrant box providing my JupyterLab environment. Comes with many popular Data Science packages for Python and doesn't care about Python Virtual Envs. Based on a container run by Docker ([`docker.io/jupyter/base-notebook:python`](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#core-stacks)). Choice of packages is stringly opinionated.
+A Vagrant box providing my JupyterLab environment. Comes with many popular Data Science packages for Python and doesn't care about Python Virtual Envs. Based on a container run by Docker ([`docker.io/jupyter/base-notebook:python`](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#core-stacks)). Choice of packages is strongly opinionated.
 
 
 # Requirements
@@ -107,6 +107,8 @@ vagrant ssh
 # Execute run.sh script
 bash /vagrant/scripts/run.sh
 ```
+
+__Notice:__ The `jupyterlab` container mounts `/tmp/python-cache` from the Vagrant box into the container on `/home/jovyan/.cache`. This way downloaded TensorFlow models, PyTorch models and other cached downloads survive a container restart.
 
 ## Exec JupyterLab Container as `root`
 ```
