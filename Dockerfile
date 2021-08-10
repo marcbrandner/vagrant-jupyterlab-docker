@@ -1,4 +1,4 @@
-FROM docker.io/jupyter/base-notebook:python-3.8.10
+FROM docker.io/jupyter/base-notebook:python-3.8.8
 
 # Switch to root to allow apt commands
 USER root
@@ -69,6 +69,9 @@ RUN cat /proc/cpuinfo | grep avx2; if [ $? -eq 0 ]; then export TF_ENABLE_ONEDNN
 
 # Other ML packages: mlxtend xgboost rrcf
 
+RUN echo '--- Install Pytorch & Transformers' \
+    && pip install torch==1.9.0 transformers==4.9.1
+
 RUN echo '--- Install Pystan Version Compatible with Prophet' \
 && pip install pystan==2.19.1.1 \
 && rm -rf ~/.cache/pip
@@ -84,10 +87,10 @@ RUN echo '--- Install NLP Packages' \
     langdetect \
 && rm -rf ~/.cache/pip
 
-# Uncomment for download of language modules (trf models are large)
-#RUN python -m spacy download en_core_web_sm
+# Uncomment for download of language modules (trf models are commented because they are quite large)
+RUN python -m spacy download en_core_web_sm
 #RUN python -m spacy download en_core_web_trf
-#RUN python -m spacy download de_core_news_sm
+RUN python -m spacy download de_core_news_sm
 #RUN python -m spacy download de_dep_news_trf
 
 RUN echo '--- Update JupyterLab to latest' \
@@ -107,11 +110,16 @@ RUN echo '--- Install JupyterLab Extensions' \
     @jupyter-widgets/jupyterlab-manager \
     --no-build > /dev/null
 
-RUN echo '--- Enable ipywidgets ' \
-&& jupyter nbextension enable --py widgetsnbextension
-    
+# https://ipywidgets.readthedocs.io/en/stable/user_install.html#installation
+RUN echo '--- Update ipywidgets' \
+    && conda update -y -n base conda \
+    && conda install -y -c conda-forge ipywidgets
+
 RUN echo '--- Build JupyterLab Assets (may take several minutes ...)' \
 && jupyter lab build --minimize=False > /dev/null
+
+RUN echo '--- Enable ipywidgets ' \
+&& jupyter nbextension enable --py widgetsnbextension
 
 RUN echo '--- Enable JupyterLab Server Extensions' \
 && jupyter serverextension enable jupytext \
