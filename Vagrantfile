@@ -1,13 +1,31 @@
 require 'yaml'
 
+# Load box configuration
 if File.exist?('vagrant_custom.yaml')
   settings_file = 'vagrant_custom.yaml'
 else
   settings_file = 'vagrant_default.yaml'
 end
-
 vagrant_config = YAML.load_file(settings_file)
 
+# List of required plugins
+required_plugins = [
+  "vagrant-disksize",
+  "vagrant-hostmanager",
+  "vagrant-hosts",
+  "vagrant-reload",
+  "vagrant-vbguest"
+]
+
+# Abort if any of the required plugins is not installed
+for plugin in required_plugins do
+  unless Vagrant.has_plugin?(plugin)
+    puts "ERROR: Required plugin '" + plugin + "' is not installed. Install with command: 'vagrant plugin install " + plugin + "'"
+    abort
+  end  
+end
+
+# Create box
 Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |vb|
     vb.name = "jupyterlab-docker"
