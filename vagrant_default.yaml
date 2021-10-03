@@ -1,6 +1,7 @@
 machine:
   cpu: 2
   memory: 4000
+  disk: '50GB'
 synced_folders:
   - box_path: /data
     host_path: ../data

@@ -36,6 +36,7 @@ Vagrant.configure("2") do |config|
   end
   config.vm.hostname = "jupyterlab"
   config.vm.box = "ubuntu/focal64"
+  config.disksize.size = vagrant_config.fetch('machine').fetch('disk')
   config.vm.network "forwarded_port", guest: 8888, host: 8123   # access JupyterLab
   config.vm.network "forwarded_port", guest: 8050, host: 8050   # access Plotly Dash Server (started from within a notebook)
   config.vm.network "forwarded_port", guest: 8787, host: 8787   # Dask Dashboard
