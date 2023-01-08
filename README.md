@@ -1,3 +1,7 @@
+__THIS REPOSITORY IS ARCHIVED.__ Use the [Jupyter Docker Stacks](https://jupyter-docker-stacks.readthedocs.io/en/latest/) instead. Working with containers - including building custom container images - is way more efficient than installing Python packages and JupyterLab extensions in a Vagrant box.
+
+_____
+
 A Vagrant box providing my JupyterLab environment. Comes with many popular Data Science packages for Python and doesn't care about Python Virtual Envs. Based on a container run by Docker ([`docker.io/jupyter/base-notebook:python`](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#core-stacks)). Choice of packages is strongly opinionated.
 
 
